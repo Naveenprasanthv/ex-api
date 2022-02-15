@@ -1,0 +1,526 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd ">
+    <apikit:config name="experience-config" api="resource::a48df65f-4162-4f7b-b907-b5f038686e7a:experience:1.0.0:raml:zip:experience.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <flow name="experience-main">
+        <http:listener path="/api/*" config-ref="HTTP_Listener_config">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body><![CDATA[#[payload]]]></http:body>
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:router config-ref="experience-config" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:BAD_REQUEST">
+                <ee:transform>
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Bad request"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">400</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform>
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:METHOD_NOT_ALLOWED">
+                <ee:transform>
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Method not allowed"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">405</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_ACCEPTABLE">
+                <ee:transform>
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not acceptable"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">406</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:UNSUPPORTED_MEDIA_TYPE">
+                <ee:transform>
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Unsupported media type"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">415</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_IMPLEMENTED">
+                <ee:transform>
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not Implemented"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">501</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="experience-console">
+        <http:listener path="/console/*" config-ref="HTTP_Listener_config">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body><![CDATA[#[payload]]]></http:body>
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:console config-ref="experience-config" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform>
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="delete:\car\(carId):experience-config">
+        <flow-ref doc:name="Flow Reference" doc:id="8daf7dd6-3215-4814-8b39-834c01838115" name="CarsFlow"/>
+    </flow>
+    <flow name="delete:\carbooking\(carbookingId):experience-config">
+        <flow-ref doc:name="Flow Reference" doc:id="5423d271-f8ba-4d29-97c4-2c61df181845" name="CarsBookingFlow"/>
+    </flow>
+    <flow name="delete:\carpartner\(carpartnerId):experience-config">
+        <flow-ref doc:name="Flow Reference" doc:id="be6e27d7-56b9-4609-90f3-d6b159251da6" name="CarsPartnersFlow"/>
+    </flow>
+    <flow name="delete:\flight\(flightid):experience-config">
+		<flow-ref doc:name="Flow Reference" doc:id="3638adbf-91a0-48d0-84f8-8ff4d8442409" name="Flights_Flow"/>
+    </flow>
+    <flow name="delete:\flightbooking\(bookingid):experience-config">
+        <flow-ref doc:name="Flow Reference" doc:id="4a2dfcf8-bfa3-457d-baaf-d87a344bbb71" name="Flights_Booking_Flow"/>
+    </flow>
+    <flow name="delete:\flightpartner\(partnerid):experience-config">
+        <flow-ref doc:name="Flow Reference" doc:id="b6ab5c46-4f02-4163-8a2c-f776dc8a36a5" name="Flights_Partner_Flow"/>
+    </flow>
+    <flow name="delete:\hotels\(hotelid):experience-config">
+        <flow-ref doc:name="Flow Reference" doc:id="f5a64b21-d511-40e7-ae8e-91635fa39aad" name="HotelsFlow"/>
+    </flow>
+    <flow name="delete:\hotelbooking\(hbookingId):experience-config">
+        <ee:transform>
+            <ee:variables>
+                <ee:set-variable variableName="hbookingId">attributes.uriParams.'hbookingId'</ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <ee:transform>
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  code: 404,
+  reasonPhrase: "Not Found",
+  details: "The requested resource is not found"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="patch:\car\(carId):application\json:experience-config">
+        <flow-ref doc:name="Flow Reference" doc:id="b82bbefd-e419-4e00-90b1-09faeb5bf6a1" name="CarsFlow"/>
+    </flow>
+    <flow name="patch:\car\(carId):application\xml:experience-config">
+        <ee:transform>
+            <ee:variables>
+                <ee:set-variable variableName="carId">attributes.uriParams.'carId'</ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <ee:transform>
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  code: 404,
+  reasonPhrase: "Not Found",
+  details: "The requested resource is not found"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="patch:\carbooking\(carbookingId):application\json:experience-config">
+        <flow-ref doc:name="Flow Reference" doc:id="d385b32c-1074-45c5-b9e4-6620f8b497b0" name="CarsBookingFlow"/>
+    </flow>
+    <flow name="patch:\carbooking\(carbookingId):application\xml:experience-config">
+        <ee:transform>
+            <ee:variables>
+                <ee:set-variable variableName="carbookingId">attributes.uriParams.'carbookingId'</ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <ee:transform>
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  code: 404,
+  reasonPhrase: "Not Found",
+  details: "The requested resource is not found"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="patch:\carpartner\(carpartnerId):application\json:experience-config">
+        <flow-ref doc:name="Flow Reference" doc:id="5530659b-f238-4ac1-ae84-76e760cfcad2" name="CarsPartnersFlow"/>
+    </flow>
+    <flow name="patch:\carpartner\(carpartnerId):application\xml:experience-config">
+		<ee:transform>
+            <ee:variables>
+                <ee:set-variable variableName="carpartnerId">attributes.uriParams.'carpartnerId'</ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <ee:transform>
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  code: 404,
+  reasonPhrase: "Not Found",
+  details: "The requested resource is not found"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="patch:\flight\(flightid):application\json:experience-config">
+        <flow-ref doc:name="Flow Reference" doc:id="ed983dc8-8168-4f59-9b35-f9cdfa0d81d6" name="Flights_Flow"/>
+    </flow>
+    <flow name="patch:\flight\(flightid):application\xml:experience-config">
+        <ee:transform>
+            <ee:variables>
+                <ee:set-variable variableName="flightid">attributes.uriParams.'flightid'</ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <ee:transform>
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  code: 404,
+  reasonPhrase: "Not Found",
+  details: "The requested resource is not found"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="patch:\flightbooking\(bookingid):application\json:experience-config">
+        <flow-ref doc:name="Flow Reference" doc:id="fc2ec10d-e7ca-40ca-8b21-cd8466017dfb" name="Flights_Booking_Flow"/>
+    </flow>
+    <flow name="patch:\flightbooking\(bookingid):application\xml:experience-config">
+        <ee:transform>
+            <ee:variables>
+                <ee:set-variable variableName="bookingid">attributes.uriParams.'bookingid'</ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <ee:transform>
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  code: 404,
+  reasonPhrase: "Not Found",
+  details: "The requested resource is not found"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="patch:\flightpartner\(partnerid):application\json:experience-config">
+        <flow-ref doc:name="Flow Reference" doc:id="1eb6863a-e4ea-498e-bbe6-0591a472f467" name="Flights_Partner_Flow"/>
+    </flow>
+    <flow name="patch:\flightpartner\(partnerid):application\xml:experience-config">
+        <ee:transform>
+            <ee:variables>
+                <ee:set-variable variableName="partnerid">attributes.uriParams.'partnerid'</ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <ee:transform>
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  code: 404,
+  reasonPhrase: "Not Found",
+  details: "The requested resource is not found"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="patch:\hotels\(hotelid):application\json:experience-config">
+        <flow-ref doc:name="Flow Reference" doc:id="ff95d026-1667-4e81-817b-db5adcece244" name="HotelsFlow"/>
+    </flow>
+    <flow name="patch:\hotels\(hotelid):application\xml:experience-config">
+        <ee:transform>
+            <ee:variables>
+                <ee:set-variable variableName="hotelid">attributes.uriParams.'hotelid'</ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <ee:transform>
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  code: 404,
+  reasonPhrase: "Not Found",
+  details: "The requested resource is not found"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="patch:\hotelbooking\(hbookingId):application\json:experience-config">
+        <flow-ref doc:name="Flow Reference" doc:id="ccce3da3-b7f6-4677-807f-9db09978be8e" name="HotelBookingFlow"/>
+    </flow>
+    <flow name="patch:\hotelbooking\(hbookingId):application\xml:experience-config">
+		<ee:transform>
+            <ee:variables>
+                <ee:set-variable variableName="hbookingId">attributes.uriParams.'hbookingId'</ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <ee:transform>
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  code: 404,
+  reasonPhrase: "Not Found",
+  details: "The requested resource is not found"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="get:\car\(carId):experience-config">
+		<flow-ref doc:name="Flow Reference" doc:id="a4a4ff8d-ebd4-4c46-9018-08bde3ac2bbe" name="CarsFlow"/>
+    </flow>
+    <flow name="get:\car:experience-config">
+        <flow-ref doc:name="Flow Reference" doc:id="375c77c1-81ac-4b52-8158-9bce22a528f9" name="CarsFlow"/>
+    </flow>
+    <flow name="get:\carbooking\(carbookingId):experience-config">
+        <flow-ref doc:name="Flow Reference" doc:id="dcdfc7e8-807a-4846-a313-d8bf650bcf56" name="CarsBookingFlow"/>
+    </flow>
+    <flow name="get:\carbooking:experience-config">
+        <flow-ref doc:name="Flow Reference" doc:id="af279848-5610-4a28-9494-2de7899d6fcc" name="CarsBookingFlow"/>
+    </flow>
+    <flow name="get:\carpartner:experience-config">
+        <flow-ref doc:name="Flow Reference" doc:id="d07f5930-efd4-4bc5-bdfe-078c375d8f93" name="CarsPartnersFlow"/>
+    </flow>
+    <flow name="get:\carpartner\(carpartnerId):experience-config">
+        <flow-ref doc:name="Flow Reference" doc:id="d09a2044-4fb1-4cc7-a5ea-356ba3b55a0a" name="CarsPartnersFlow"/>
+    </flow>
+    <flow name="get:\flight:experience-config">
+        <flow-ref doc:name="Flow Reference" doc:id="a124f90a-035c-4074-a1d1-702eeedd545f" name="Flights_Flow"/>
+    </flow>
+    <flow name="get:\flight\(flightid):experience-config">
+        <flow-ref doc:name="Flow Reference" doc:id="31ef5270-c30c-4d6a-b937-8363cd0897ac" name="Flights_Flow"/>
+    </flow>
+    <flow name="get:\flightbooking\(bookingid):experience-config">
+        <flow-ref doc:name="Flow Reference" doc:id="96fd6ee1-9af4-49b2-9e6e-d9c677dba929" name="Flights_Booking_Flow"/>
+    </flow>
+    <flow name="get:\flightbooking:experience-config">
+        <flow-ref doc:name="Flow Reference" doc:id="98c29e93-9dbb-4b66-be6e-7a3dece0577f" name="Flights_Booking_Flow"/>
+    </flow>
+    <flow name="get:\flightpartner:experience-config">
+        <flow-ref doc:name="Flow Reference" doc:id="908d7aca-7e85-45fa-bf44-3b21214a23dd" name="Flights_Partner_Flow"/>
+    </flow>
+    <flow name="get:\flightpartner\(partnerid):experience-config">
+        <flow-ref doc:name="Flow Reference" doc:id="8ec77941-2943-414b-aec6-a526f9d76936" name="Flights_Partner_Flow"/>
+    </flow>
+    <flow name="get:\hotels\(hotelid):experience-config">
+        <flow-ref doc:name="Flow Reference" doc:id="1cdaab89-c6ec-4715-86bf-3939026090e3" name="HotelsFlow"/>
+    </flow>
+    <flow name="get:\hotelbooking\(hbookingId):experience-config">
+        <flow-ref doc:name="Flow Reference" doc:id="58758b8c-55e5-4864-9a12-8f078e85d23f" name="HotelBookingFlow"/>
+    </flow>
+    <flow name="get:\hotels\(hotelid)\hotelbooking:experience-config">
+        <flow-ref doc:name="Flow Reference" doc:id="05666df5-d277-4c9e-acee-a753e81d6b48" name="HotelsFlow"/>
+    </flow>
+    <flow name="get:\hotelbooking:experience-config">
+        <flow-ref doc:name="Flow Reference" doc:id="704116a8-1724-46f9-bf75-a02e2f4937d2" name="HotelBookingFlow"/>
+    </flow>
+    <flow name="get:\hotels:experience-config">
+        <flow-ref doc:name="Flow Reference" doc:id="d26165f9-b457-4dc8-868a-855b0957a9ea" name="HotelsFlow"/>
+    </flow>
+    <flow name="post:\car:application\json:experience-config">
+        <flow-ref doc:name="Flow Reference" doc:id="b818f3a9-e041-4b98-95a8-de6388ca5c55" name="CarsFlow"/>
+    </flow>
+    <flow name="post:\car:application\xml:experience-config">
+        <ee:transform>
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  code: 404,
+  reasonPhrase: "Not Found",
+  details: "The requested resource is not found"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="post:\carbooking:application\json:experience-config">
+        <flow-ref doc:name="Flow Reference" doc:id="9df8536d-faee-4c6e-af92-bf5f62e34e32" name="CarsBookingFlow"/>
+    </flow>
+    <flow name="post:\carbooking:application\xml:experience-config">
+		<ee:transform>
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  code: 404,
+  reasonPhrase: "Not Found",
+  details: "The requested resource is not found"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="post:\carpartner:application\json:experience-config">
+        <flow-ref doc:name="Flow Reference" doc:id="da2c12fd-5f84-4819-9b2d-a4b57ebe3780" name="CarsPartnersFlow"/>
+    </flow>
+    <flow name="post:\carpartner:application\xml:experience-config">
+        <ee:transform>
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  code: 404,
+  reasonPhrase: "Not Found",
+  details: "The requested resource is not found"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="post:\flight:application\json:experience-config">
+		<flow-ref doc:name="Flow Reference" doc:id="b62b5bff-f932-4ada-8800-f728243b4997" name="Flights_Flow"/>
+    </flow>
+    <flow name="post:\flight:application\xml:experience-config">
+        <ee:transform>
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  code: 404,
+  reasonPhrase: "Not Found",
+  details: "The requested resource is not found"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="post:\flightbooking:application\json:experience-config">
+        <flow-ref doc:name="Flow Reference" doc:id="c7203b65-34bc-4f30-a982-13e96f77b922" name="Flights_Booking_Flow"/>
+    </flow>
+    <flow name="post:\flightbooking:application\xml:experience-config">
+        <ee:transform>
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  code: 404,
+  reasonPhrase: "Not Found",
+  details: "The requested resource is not found"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="post:\flightpartner:application\json:experience-config">
+        <flow-ref doc:name="Flow Reference" doc:id="07de2d2b-1a66-4205-9aa6-cbaeabf245f3" name="Flights_Partner_Flow"/>
+    </flow>
+    <flow name="post:\flightpartner:application\xml:experience-config">
+        <ee:transform>
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  code: 404,
+  reasonPhrase: "Not Found",
+  details: "The requested resource is not found"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="post:\hotelbooking:application\json:experience-config">
+        <flow-ref doc:name="Flow Reference" doc:id="202a077b-097f-422c-b715-520ba7656f8f" name="HotelBookingFlow"/>
+    </flow>
+    <flow name="post:\hotelbooking:application\xml:experience-config">
+        <ee:transform>
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  code: 404,
+  reasonPhrase: "Not Found",
+  details: "The requested resource is not found"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="post:\hotels:application\json:experience-config">
+        <flow-ref doc:name="Flow Reference" doc:id="5cfb47a7-c72a-4529-b1ae-4a48c990f187" name="HotelsFlow"/>
+    </flow>
+    <flow name="post:\hotels:application\xml:experience-config">
+        <ee:transform>
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  code: 404,
+  reasonPhrase: "Not Found",
+  details: "The requested resource is not found"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+</mule>

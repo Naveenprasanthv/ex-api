@@ -1,0 +1,574 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<flow name="Flights_Flow" doc:id="19e61c52-80b7-4970-8193-bba19218ce53" >
+		<choice doc:name="Choice" doc:id="4b8fc798-9566-41ab-904d-4ad8c622fac0" >
+			<when expression="#[attributes.method == 'GET' and attributes.uriParams.flightid == null]">
+				<http:request method="GET" doc:name="Get All Flights" doc:id="b5674212-258c-4433-8f77-f95f6ca3dd6e" config-ref="HTTP_Request_Flight_Process" path="/flights">
+			<http:headers><![CDATA[#[output application/java
+---
+{
+	"client_id" : "f96fb30a54e948cc8d18ac2ac85bff12",
+	"client_secret" : "Fa08cbF5bF38438589189754270c09f3"
+
+}]]]></http:headers>
+		</http:request>
+			</when>
+			<when expression="#[attributes.method == 'POST']">
+				<http:request method="POST" doc:name="Add Flight" doc:id="2ca6e621-675d-4998-a36b-dc3baee91f63" config-ref="HTTP_Request_Flight_Process" path="/flights">
+			<http:headers><![CDATA[#[output application/java
+---
+{
+	"client_id" : "f96fb30a54e948cc8d18ac2ac85bff12",
+	"client_secret" : "Fa08cbF5bF38438589189754270c09f3"
+
+}]]]></http:headers>
+		</http:request>
+			</when>
+			<when expression="#[attributes.method == 'PATCH']">
+				<http:request method="PATCH" doc:name="Patch Flight" doc:id="e05a1902-9c85-41ad-a111-f3c3003e57f4" config-ref="HTTP_Request_Flight_Process" path="/flights/{flightid}">
+			<http:headers><![CDATA[#[output application/java
+---
+{
+	"client_id" : "f96fb30a54e948cc8d18ac2ac85bff12",
+	"client_secret" : "Fa08cbF5bF38438589189754270c09f3"
+
+}]]]></http:headers>
+			<http:uri-params><![CDATA[#[output application/java
+---
+{
+	"flightid" : attributes.uriParams.flightid
+}]]]></http:uri-params>
+		</http:request>
+			</when>
+			<when expression="#[attributes.method == 'DELETE']">
+				<http:request method="DELETE" doc:name="Delete Flight " doc:id="62d22e80-480f-44cf-8fb0-9cd4375a3936" config-ref="HTTP_Request_Flight_Process" path="/flights/{flightid}">
+					<http:headers ><![CDATA[#[output application/java
+---
+{
+	"client_id" : "f96fb30a54e948cc8d18ac2ac85bff12",
+	"client_secret" : "Fa08cbF5bF38438589189754270c09f3"
+
+}]]]></http:headers>
+					<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	"flightid" : attributes.uriParams.flightid
+}]]]></http:uri-params>
+				</http:request>
+			</when>
+			<when expression="#[attributes.method == 'GET' and attributes.uriParams.flightid != null]">
+				<http:request method="GET" doc:name="GetFlightByID" doc:id="d116f729-4399-4c83-a121-d21934af9fe9" config-ref="HTTP_Request_Flight_Process" path="/flights/{flightid}">
+			<http:body><![CDATA[payload]]></http:body>
+			<http:headers><![CDATA[#[output application/java
+---
+{
+	"client_id" : "f96fb30a54e948cc8d18ac2ac85bff12",
+	"client_secret" : "Fa08cbF5bF38438589189754270c09f3"
+
+}]]]></http:headers>
+			<http:uri-params><![CDATA[#[output application/java
+---
+{
+	"flightid" : attributes.uriParams.flightid
+}]]]></http:uri-params>
+		</http:request>
+			</when>
+			<otherwise >
+				<set-payload value="Wrong Method" doc:name="Set Payload" doc:id="d356abf8-a04b-4dba-9f9a-99eba4136ab8" />
+			</otherwise>
+		</choice>
+	</flow>
+	<flow name="Flights_Booking_Flow" doc:id="2381a3fb-78e4-4e3b-a81b-716caedbeef8">
+		<choice doc:name="Choice" doc:id="8f749fcb-5c42-439a-afcb-f24f668b6760">
+			<when expression="#[attributes.method == 'GET' and attributes.uriParams.bookingid == null]">
+				<http:request method="GET" doc:name="Get All Bookings" doc:id="a4cbf059-eeac-4f37-9ab7-fdde9412638f" config-ref="HTTP_Request_Flight_Process" path="/bookings">
+					<http:headers><![CDATA[#[output application/java
+---
+{
+	"client_id" : "f96fb30a54e948cc8d18ac2ac85bff12",
+	"client_secret" : "Fa08cbF5bF38438589189754270c09f3"
+
+}]]]></http:headers>
+				</http:request>
+			</when>
+			<when expression="#[attributes.method == 'POST']">
+				<http:request method="POST" doc:name="Add Booking" doc:id="585e79cf-e349-4b75-afc3-125f0c55815b" config-ref="HTTP_Request_Flight_Process" path="/bookings">
+					<http:headers><![CDATA[#[output application/java
+---
+{
+	"client_id" : "f96fb30a54e948cc8d18ac2ac85bff12",
+	"client_secret" : "Fa08cbF5bF38438589189754270c09f3"
+
+}]]]></http:headers>
+				</http:request>
+			</when>
+			<when expression="#[attributes.method == 'PATCH']">
+				<http:request method="PATCH" doc:name="Modify Booking By ID" doc:id="729f086a-c431-462d-a82e-fe5abbbe8520" config-ref="HTTP_Request_Flight_Process" path="/bookings/{bookingid}">
+					<http:headers><![CDATA[#[output application/java
+---
+{
+	"client_id" : "f96fb30a54e948cc8d18ac2ac85bff12",
+	"client_secret" : "Fa08cbF5bF38438589189754270c09f3"
+
+}]]]></http:headers>
+					<http:uri-params><![CDATA[#[output application/java
+---
+{
+	"bookingid" : attributes.uriParams.bookingid
+}]]]></http:uri-params>
+				</http:request>
+			</when>
+			<when expression="#[attributes.method == 'DELETE']">
+				<http:request method="DELETE" doc:name="Delete Booking by ID" doc:id="a27688cf-24d9-42cc-bc2d-20da19d50629" config-ref="HTTP_Request_Flight_Process" path="/bookings/{bookingid}">
+					<http:headers><![CDATA[#[output application/java
+---
+{
+	"client_id" : "f96fb30a54e948cc8d18ac2ac85bff12",
+	"client_secret" : "Fa08cbF5bF38438589189754270c09f3"
+
+}]]]></http:headers>
+					<http:uri-params><![CDATA[#[output application/java
+---
+{
+	"bookingid" : attributes.uriParams.bookingid
+}]]]></http:uri-params>
+				</http:request>
+			</when>
+			<when expression="#[attributes.method == 'GET' and attributes.uriParams.bookingid != null]">
+				<http:request method="GET" doc:name="GetBookingByID" doc:id="5145a08f-6437-4a79-974c-fb9ba02b76f6" config-ref="HTTP_Request_Flight_Process" path="/bookings/{bookingid}">
+			<http:headers><![CDATA[#[output application/java
+---
+{
+	"client_id" : "f96fb30a54e948cc8d18ac2ac85bff12",
+	"client_secret" : "Fa08cbF5bF38438589189754270c09f3"
+
+}]]]></http:headers>
+			<http:uri-params><![CDATA[#[output application/java
+---
+{
+	"bookingid" : attributes.uriParams.bookingid
+}]]]></http:uri-params>
+		</http:request>
+			</when>
+			<otherwise>
+				<set-payload value="Wrong Method" doc:name="Payload" doc:id="981fe4ae-b2ac-47c7-a615-e7781855eb6e" />
+			</otherwise>
+		</choice>
+	</flow>
+	<flow name="Flights_Partner_Flow" doc:id="3abb0c56-76ed-46f2-b7aa-d800a7cfd94b">
+		<choice doc:name="Choice" doc:id="5fb1feb5-abef-432c-9e0b-cbfa53dfbfa4">
+			<when expression="#[attributes.method == 'GET' and attributes.uriParams.partnerid == null]">
+				<http:request method="GET" doc:name="Get All Bookings" doc:id="262e24a3-32d2-41ae-89a1-4d62e7ed99b1" config-ref="HTTP_Request_Flight_Process" path="/partners">
+					<http:headers><![CDATA[#[output application/java
+---
+{
+	"client_id" : "f96fb30a54e948cc8d18ac2ac85bff12",
+	"client_secret" : "Fa08cbF5bF38438589189754270c09f3"
+
+}]]]></http:headers>
+				</http:request>
+			</when>
+			<when expression="#[attributes.method == 'POST']">
+				<http:request method="POST" doc:name="Add Booking" doc:id="3d3d8998-8acb-425c-a033-28ef22f0e10e" config-ref="HTTP_Request_Flight_Process" path="/partners">
+					<http:headers><![CDATA[#[output application/java
+---
+{
+	"client_id" : "f96fb30a54e948cc8d18ac2ac85bff12",
+	"client_secret" : "Fa08cbF5bF38438589189754270c09f3"
+
+}]]]></http:headers>
+				</http:request>
+			</when>
+			<when expression="#[attributes.method == 'PATCH']">
+				<http:request method="PATCH" doc:name="Modify Booking By ID" doc:id="187dd4a5-3b77-4b85-9b29-fa818c1f64b5" config-ref="HTTP_Request_Flight_Process" path="/partners/{partnerid}">
+					<http:headers><![CDATA[#[output application/java
+---
+{
+	"client_id" : "f96fb30a54e948cc8d18ac2ac85bff12",
+	"client_secret" : "Fa08cbF5bF38438589189754270c09f3"
+
+}]]]></http:headers>
+					<http:uri-params><![CDATA[#[output application/java
+---
+{
+	"bookingid" : attributes.uriParams.bookingid
+}]]]></http:uri-params>
+				</http:request>
+			</when>
+			<when expression="#[attributes.method == 'DELETE']">
+				<http:request method="DELETE" doc:name="Delete Booking by ID" doc:id="02ab4c0e-3cc8-4159-a7af-e28de7d6775f" config-ref="HTTP_Request_Flight_Process" path="/partners/{partnerid}">
+					<http:headers><![CDATA[#[output application/java
+---
+{
+	"client_id" : "f96fb30a54e948cc8d18ac2ac85bff12",
+	"client_secret" : "Fa08cbF5bF38438589189754270c09f3"
+
+}]]]></http:headers>
+					<http:uri-params><![CDATA[#[output application/java
+---
+{
+	"bookingid" : attributes.uriParams.bookingid
+}]]]></http:uri-params>
+				</http:request>
+			</when>
+			<when expression="#[attributes.method == 'GET' and attributes.uriParams.partnerid != null]">
+				<http:request method="GET" doc:name="GetFlightPartnersByID" doc:id="7d869680-e29f-48b8-8535-f30f0b78777a" config-ref="HTTP_Request_Flight_Process" path="/partners/{partnerid}">
+			<http:headers><![CDATA[#[output application/java
+---
+{
+	"client_id" : "f96fb30a54e948cc8d18ac2ac85bff12",
+	"client_secret" : "Fa08cbF5bF38438589189754270c09f3"
+
+}]]]></http:headers>
+		</http:request>
+			</when>
+			<otherwise>
+				<set-payload value="Wrong Method" doc:name="Set Payload" doc:id="9993d61a-4c53-4b10-a9f8-0a09e2bcdf29" />
+			</otherwise>
+		</choice>
+	</flow>
+	<flow name="CarsFlow" doc:id="233f8178-6b00-4277-a129-673eb490cebe" >
+		<choice doc:name="Choice" doc:id="7ffaad00-d7a2-4613-8cbf-3a6d6001c196" >
+			<when expression="#[attributes.method == 'GET' and attributes.uriParams.carid == null]">
+				<http:request method="GET" doc:name="Get All Cars" doc:id="f3cd0987-40b3-441c-905e-570c75cd4de5" config-ref="HTTP_Request_Car_Process" path="/car">
+			<http:headers><![CDATA[#[output application/java
+---
+{
+	"client_secret" : "202Ac42233F8463AA0f8453F259Fd3e3",
+	"client_id" : "cd9c762cccaf4faf963f60c7a437ad5f"
+}]]]></http:headers>
+		</http:request>
+			</when>
+			<when expression="#[attributes.method == 'POST']">
+				<http:request method="POST" doc:name="Add Cars" doc:id="7c4bdf44-2caa-4dde-8748-ace5e7acddf3" config-ref="HTTP_Request_Car_Process" path="/car">
+					<http:headers ><![CDATA[#[output application/java
+---
+{
+	"client_secret" : "202Ac42233F8463AA0f8453F259Fd3e3",
+	"client_id" : "cd9c762cccaf4faf963f60c7a437ad5f"
+}]]]></http:headers>
+				</http:request>
+			</when>
+			<when expression="attributes.method == 'PATCH'">
+				<http:request method="PATCH" doc:name="Modify Car By ID" doc:id="8ffcb741-faa6-4739-92f4-a4205b662020" config-ref="HTTP_Request_Car_Process" path="/car/{carid}">
+					<http:headers ><![CDATA[#[output application/java
+---
+{
+	"client_secret" : "202Ac42233F8463AA0f8453F259Fd3e3",
+	"client_id" : "cd9c762cccaf4faf963f60c7a437ad5f"
+}]]]></http:headers>
+					<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	"carid" : attributes.uriParams.carid
+}]]]></http:uri-params>
+				</http:request>
+			</when>
+			<when expression="attributes.method == 'DELETE'">
+				<http:request method="DELETE" doc:name="Delete Car By ID" doc:id="0f38f5fa-0664-4507-841a-4a26aed149f6" config-ref="HTTP_Request_Car_Process" path="/car/{carid}">
+					<http:headers ><![CDATA[#[output application/java
+---
+{
+	"client_secret" : "202Ac42233F8463AA0f8453F259Fd3e3",
+	"client_id" : "cd9c762cccaf4faf963f60c7a437ad5f"
+}]]]></http:headers>
+					<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	"carid" : attributes.uriParams.carid
+}]]]></http:uri-params>
+				</http:request>
+			</when>
+			<when expression="#[attributes.method == 'GET' and attributes.uriParams.carid != null]">
+				<http:request method="GET" doc:name="Get Car By ID" doc:id="b093710e-8ed0-4f97-bdf9-e9e86217f7ba" config-ref="HTTP_Request_Car_Process" path="/car/{carId}">
+			<http:headers><![CDATA[#[output application/java
+---
+{
+	"client_secret" : "202Ac42233F8463AA0f8453F259Fd3e3",
+	"client_id" : "cd9c762cccaf4faf963f60c7a437ad5f"
+}]]]></http:headers>
+			<http:uri-params><![CDATA[#[output application/java
+---
+{
+	"carId" : attributes.uriParams.carId
+}]]]></http:uri-params>
+		</http:request>
+			</when>
+			<otherwise >
+				<set-payload value="Wrong Input/Method " doc:name="Set Payload" doc:id="6f7e2873-472d-478d-bf69-f47d723ac30f" />
+			</otherwise>
+		</choice>
+	</flow>
+	<flow name="CarsBookingFlow" doc:id="5c303288-b0de-479a-af36-0675e043389e" >
+		<choice doc:name="Choice" doc:id="d55ad7a1-c56f-40d1-99ba-12be43ac8a35" >
+			<when expression="#[attributes.method == 'GET' and attributes.uriParams.bookingid == null]" >
+				<http:request method="GET" doc:name="Get All CarBooking" doc:id="cae1f64b-ac06-43b9-96f7-2617e50c9a21" config-ref="HTTP_Request_Car_Process" path="/booking" >
+					<http:headers ><![CDATA[#[output application/java
+---
+{
+	"client_secret" : "202Ac42233F8463AA0f8453F259Fd3e3",
+	"client_id" : "cd9c762cccaf4faf963f60c7a437ad5f"
+}]]]></http:headers>
+				</http:request>
+			</when>
+			<when expression="#[attributes.method == 'POST']" >
+				<http:request method="POST" doc:name="Add Booking" doc:id="d225d85a-5748-45b0-9415-0f7bf2fa8687" config-ref="HTTP_Request_Car_Process" path="/booking" >
+					<http:headers ><![CDATA[#[output application/java
+---
+{
+	"client_secret" : "202Ac42233F8463AA0f8453F259Fd3e3",
+	"client_id" : "cd9c762cccaf4faf963f60c7a437ad5f"
+}]]]></http:headers>
+				</http:request>
+			</when>
+			<when expression="attributes.method == 'DELETE'" >
+				<http:request method="DELETE" doc:name="Delete Booking By ID" doc:id="84f0103a-89e7-46c0-99ec-6b486ac93af8" config-ref="HTTP_Request_Car_Process" path="/booking/{bookingid}" >
+					<http:headers ><![CDATA[#[output application/java
+---
+{
+	"client_secret" : "202Ac42233F8463AA0f8453F259Fd3e3",
+	"client_id" : "cd9c762cccaf4faf963f60c7a437ad5f"
+}]]]></http:headers>
+					<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	"bookingid" : attributes.uriParams.bookingid
+}]]]></http:uri-params>
+				</http:request>
+			</when>
+			<when expression="#[attributes.method == 'GET' and attributes.uriParams.bookingid != null]">
+				<http:request method="GET" doc:name="GetCarBookingByID" doc:id="d24c6bcb-649b-4f9f-afc5-1dc86b3e36ff" config-ref="HTTP_Request_Car_Process" path="/booking/{bookingid}" >
+					<http:headers ><![CDATA[#[output application/java
+---
+{
+	"client_secret" : "202Ac42233F8463AA0f8453F259Fd3e3",
+	"client_id" : "cd9c762cccaf4faf963f60c7a437ad5f"
+}]]]></http:headers>
+				</http:request>
+			</when>
+			<otherwise >
+				<set-payload value="Wrong Input/Method " doc:name="Set Payload" doc:id="2a417b66-c1e8-4d3a-9414-23b3ee6147e8" />
+			</otherwise>
+		</choice>
+	</flow>
+	<flow name="CarsPartnersFlow" doc:id="96684107-78ef-40b2-8ea5-63d6380e0c8f">
+		<choice doc:name="Choice" doc:id="0746dafa-299d-440f-abcd-3bbb151b2223">
+			<when expression="#[attributes.method == 'GET' and attributes.uriParams.partnerid == null]">
+				<http:request method="GET" doc:name="Get All Partners" doc:id="bc615ad7-26b5-41fc-a6ed-434f95a7d733" config-ref="HTTP_Request_Car_Process" path="/partner">
+					<http:headers><![CDATA[#[output application/java
+---
+{
+	"client_secret" : "202Ac42233F8463AA0f8453F259Fd3e3",
+	"client_id" : "cd9c762cccaf4faf963f60c7a437ad5f"
+}]]]></http:headers>
+				</http:request>
+			</when>
+			<when expression="#[attributes.method == 'POST']">
+				<http:request method="POST" doc:name="Add Partner" doc:id="cebefb92-e1bc-4404-be8a-ee97819771bd" config-ref="HTTP_Request_Car_Process" path="/partner">
+					<http:headers><![CDATA[#[output application/java
+---
+{
+	"client_secret" : "202Ac42233F8463AA0f8453F259Fd3e3",
+	"client_id" : "cd9c762cccaf4faf963f60c7a437ad5f"
+}]]]></http:headers>
+				</http:request>
+			</when>
+			<when expression="attributes.method == 'DELETE'" >
+				<http:request method="DELETE" doc:name="Delete Partner By ID" doc:id="89fc20d5-13a2-40c8-9966-263733245897" config-ref="HTTP_Request_Car_Process" path="/partner/{partnerid}">
+					<http:headers><![CDATA[#[output application/java
+---
+{
+	"client_secret" : "202Ac42233F8463AA0f8453F259Fd3e3",
+	"client_id" : "cd9c762cccaf4faf963f60c7a437ad5f"
+}]]]></http:headers>
+					<http:uri-params><![CDATA[#[output application/java
+---
+{
+	"partnerid" : attributes.uriParams.partnerid
+}]]]></http:uri-params>
+				</http:request>
+			</when>
+			<when expression="#[attributes.method == 'PATCH']">
+				<http:request method="PATCH" doc:name="Modify partner details" doc:id="388cff27-bf56-4ea1-a9a1-b517dcad1198" config-ref="HTTP_Request_Car_Process" path="/partner/{partnerid}">
+					<http:headers ><![CDATA[#[output application/java
+---
+{
+	"client_secret" : "202Ac42233F8463AA0f8453F259Fd3e3",
+	"client_id" : "cd9c762cccaf4faf963f60c7a437ad5f"
+}]]]></http:headers>
+					<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	"partnerid" : attributes.uriParams.partnerid
+}]]]></http:uri-params>
+				</http:request>
+			</when>
+			<when expression="#[attributes.method == 'GET' and attributes.uriParams.partnerid != null]">
+				<http:request method="GET" doc:name="Get Partner By ID" doc:id="ba2a91c7-7a90-4258-a112-ba33cc6fc727" config-ref="HTTP_Request_Car_Process" path="/partner/{partnerid}">
+			<http:headers><![CDATA[#[output application/java
+---
+{
+	"client_secret" : "202Ac42233F8463AA0f8453F259Fd3e3",
+	"client_id" : "cd9c762cccaf4faf963f60c7a437ad5f"
+}]]]></http:headers>
+			<http:uri-params><![CDATA[#[output application/java
+---
+{
+	"partnerid" : attributes.uriParams.partnerid
+}]]]></http:uri-params>
+		</http:request>
+			</when>
+			<otherwise>
+				<set-payload value="Wrong Input/Method " doc:name="Payload" doc:id="41510158-cd98-421c-a6c5-f6478059d82e" />
+			</otherwise>
+		</choice>
+	</flow>
+	<flow name="HotelsFlow" doc:id="19787885-ed56-414b-bf62-6035a78fc906" >
+		<choice doc:name="Choice" doc:id="f98b091d-7cb5-4c76-b251-dee4cea8f96d" >
+			<when expression="#[attributes.method == 'POST']" >
+				<http:request method="POST" doc:name="Add Hotel" doc:id="efa3e45d-aad0-46f7-94b9-74504d990cb4" config-ref="HTTP_Request_Hotel_Process" path="/hotels" >
+					<http:headers ><![CDATA[#[output application/java
+---
+{
+	"client_secret" : "29F5BC05d6914258910FF4F07Af944ca",
+	"client_id" : "7db31338a0464997a8493ac5caa3d91a"
+}]]]></http:headers>
+				</http:request>
+			</when>
+			<when expression="attributes.method == 'DELETE'" >
+				<http:request method="DELETE" doc:name="Delete Hotel By ID" doc:id="12b7e95d-6de6-4d0f-8026-7570356bbb2d" config-ref="HTTP_Request_Hotel_Process" path="/hotels/{hotelid}" >
+					<http:headers ><![CDATA[#[output application/java
+---
+{
+	"client_secret" : "29F5BC05d6914258910FF4F07Af944ca",
+	"client_id" : "7db31338a0464997a8493ac5caa3d91a"
+}]]]></http:headers>
+					<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	"hotelid" : attributes.uriParams.hotelid
+}]]]></http:uri-params>
+				</http:request>
+			</when>
+			<when expression="#[attributes.method == 'PATCH']" >
+				<http:request method="PATCH" doc:name="Modify Hotel details" doc:id="b0992369-b877-43c6-8366-8e84596562ce" config-ref="HTTP_Request_Hotel_Process" path="/hotels/{hotelid}" >
+					<http:headers ><![CDATA[#[output application/java
+---
+{
+	"client_secret" : "29F5BC05d6914258910FF4F07Af944ca",
+	"client_id" : "7db31338a0464997a8493ac5caa3d91a"
+}]]]></http:headers>
+					<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	"hotelid" : attributes.uriParams.hotelid
+}]]]></http:uri-params>
+				</http:request>
+			</when>
+			<when expression="#[attributes.method == 'GET' and attributes.uriParams.hotelid != null]" >
+				<http:request method="GET" doc:name="Get Hotel By ID" doc:id="04c52008-0d99-4c18-932a-039c80f713dd" config-ref="HTTP_Request_Hotel_Process" path="/hotels/{hotelid}" >
+					<http:headers ><![CDATA[#[output application/java
+---
+{
+	"client_secret" : "29F5BC05d6914258910FF4F07Af944ca",
+	"client_id" : "7db31338a0464997a8493ac5caa3d91a"
+}]]]></http:headers>
+					<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	"hotelid" : attributes.uriParams.hotelid
+}]]]></http:uri-params>
+				</http:request>
+			</when>
+			<when expression="#[attributes.method == 'GET' and attributes.uriParams.hotelid == null]" >
+				<http:request method="GET" doc:name="Get All Hotels" doc:id="de1a59a4-21d6-4255-85af-1f8e4c9f5185" config-ref="HTTP_Request_Hotel_Process" path="/hotels">
+			<http:headers><![CDATA[#[output application/java
+---
+{
+	"client_secret" : "29F5BC05d6914258910FF4F07Af944ca",
+	"client_id" : "7db31338a0464997a8493ac5caa3d91a"
+}]]]></http:headers>
+		</http:request>
+			</when>
+			<otherwise >
+				<set-payload value="Wrong Input/Method " doc:name="Payload" doc:id="b88473f5-5a62-4ae8-a0b9-7271352afecd" />
+			</otherwise>
+		</choice>
+	</flow>
+	<flow name="HotelBookingFlow" doc:id="42f6fd5d-448e-4339-b3be-900a0867722a" >
+		<choice doc:name="CChoice" doc:id="af7de0bd-de64-4da1-9714-6a2b37a04252" >
+			<when expression="#[attributes.method == 'GET' and attributes.uriParams.bookingid == null]" >
+				<http:request method="GET" doc:name="Get All Bookings" doc:id="9852f1bd-f366-4fb9-be38-aa0dd1bcb093" config-ref="HTTP_Request_Hotel_Process" path="/booking" >
+					<http:headers ><![CDATA[#[output application/java
+---
+{
+	"client_secret" : "29F5BC05d6914258910FF4F07Af944ca",
+	"client_id" : "7db31338a0464997a8493ac5caa3d91a"
+}]]]></http:headers>
+				</http:request>
+			</when>
+			<when expression="#[attributes.method == 'POST']" >
+				<http:request method="POST" doc:name="Add Booking" doc:id="024097f8-3226-4a67-b198-7310a37769b1" config-ref="HTTP_Request_Hotel_Process" path="/booking" >
+					<http:headers ><![CDATA[#[output application/java
+---
+{
+	"client_secret" : "29F5BC05d6914258910FF4F07Af944ca",
+	"client_id" : "7db31338a0464997a8493ac5caa3d91a"
+}]]]></http:headers>
+				</http:request>
+			</when>
+			<when expression="attributes.method == 'DELETE'" >
+				<http:request method="DELETE" doc:name="Delete Booking By ID" doc:id="2cb11605-dedd-4d0d-8a6e-2b355db0f1a3" config-ref="HTTP_Request_Hotel_Process" path="/booking/{bookingid}" >
+					<http:headers ><![CDATA[#[output application/java
+---
+{
+	"client_secret" : "29F5BC05d6914258910FF4F07Af944ca",
+	"client_id" : "7db31338a0464997a8493ac5caa3d91a"
+}]]]></http:headers>
+					<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	"bookingid" : attributes.uriParams.bookingid
+}]]]></http:uri-params>
+				</http:request>
+			</when>
+			<when expression="#[attributes.method == 'PATCH']" >
+				<http:request method="PATCH" doc:name="Modify Booking details" doc:id="2c33be6b-2710-4ca8-9d9a-845357ca8179" config-ref="HTTP_Request_Hotel_Process" path="/booking/{bookingid}" >
+					<http:headers ><![CDATA[#[output application/java
+---
+{
+	"client_secret" : "29F5BC05d6914258910FF4F07Af944ca",
+	"client_id" : "7db31338a0464997a8493ac5caa3d91a"
+}]]]></http:headers>
+					<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	"bookingid" : attributes.uriParams.bookingid
+}]]]></http:uri-params>
+				</http:request>
+			</when>
+			<when expression="#[attributes.method == 'GET' and attributes.uriParams.bookingid != null]" >
+				<http:request method="GET" doc:name="Get Booking By ID" doc:id="fbf964d4-c5a7-4f86-9e26-63ab68800bc8" config-ref="HTTP_Request_Hotel_Process" path="/booking/{bookingid}" >
+					<http:headers ><![CDATA[#[output application/java
+---
+{
+	"client_secret" : "29F5BC05d6914258910FF4F07Af944ca",
+	"client_id" : "7db31338a0464997a8493ac5caa3d91a"
+}]]]></http:headers>
+					<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	"bookingid" : attributes.uriParams.bookingid
+}]]]></http:uri-params>
+				</http:request>
+			</when>
+			<otherwise >
+				<set-payload value="Wrong Input/Method " doc:name="Copy_of_Payload" doc:id="c8c70e80-fc40-45db-a10f-63883ffe6d63" />
+			</otherwise>
+		</choice>
+	</flow>
+</mule>

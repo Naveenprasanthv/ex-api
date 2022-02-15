@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="8ce45008-05ac-4e5a-bc37-0720129cc117" >
+		<http:listener-connection host="${http.host}" port="${http.port}" />
+	</http:listener-config>
+	<configuration-properties doc:name="Configuration properties" doc:id="d4ad04a1-e3f7-4a0d-a765-e49e88c0089c" file="config.yaml" />
+	<http:request-config name="HTTP_Request_Car_Process" doc:name="HTTP Request configuration" doc:id="6f4a9b21-5199-4086-8b28-a6b218ff8899" basePath="/api">
+		<http:request-connection host="${basepath.car}" />
+	</http:request-config>
+	<http:request-config name="HTTP_Request_Flight_Process" doc:name="HTTP Request configuration" doc:id="dc4fc8ba-a6b6-4d8f-9ac9-ddaaf0f17d64" basePath="/api">
+		<http:request-connection host="${basepath.flight}" />
+	</http:request-config>
+	<http:request-config name="HTTP_Request_Hotel_Process" doc:name="HTTP Request configuration" doc:id="47b6d3a3-0c0e-4afc-b306-fec4b779f2f9" basePath="/api">
+		<http:request-connection host="${basepath.hotel}" />
+	</http:request-config>
+</mule>

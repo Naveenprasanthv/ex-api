@@ -1,0 +1,5 @@
+%dw 2.0
+
+type auto_19787885_ed56_414b_bf62_6035a78fc906_Output_Payload = Array<{  amenities: String,   rooms: String,   address: String,   rating: String,   hotelId: Number,   paymentTypes: String,   transport: String,   hotelName: String,   food: String,   _?: Any} {"description": "Hotel Details",
+"label": "Hotel DataType"}>
+

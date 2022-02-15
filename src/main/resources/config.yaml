@@ -1,0 +1,9 @@
+http:
+  port: "8081"
+  host: "localhost"
+
+basepath:
+  flight: "flights-booking-process-api-lolkow.us-e2.cloudhub.io" 
+  hotel: "hotel-booking-process-api-lolnav.us-e2.cloudhub.io"
+  car: "cats-booking-process-api-lolkow.us-e2.cloudhub.io"
+  
