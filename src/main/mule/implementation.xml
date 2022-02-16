@@ -643,7 +643,7 @@ action]]></ee:set-payload>
 					<ee:message >
 						<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
-var action = if(payload."Hotel ID" == null) Message: "No Data found for the given Booking ID " else payload
+var action = if(payload."Booking ID" == null) Message: "No Data found for the given Booking ID " else payload
 ---
 action]]></ee:set-payload>
 					</ee:message>
