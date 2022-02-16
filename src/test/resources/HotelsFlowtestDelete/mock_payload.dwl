@@ -1,0 +1,1 @@
+"Hotel has been Deleted Successfully."

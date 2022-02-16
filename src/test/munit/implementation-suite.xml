@@ -766,6 +766,142 @@ assert_expression_payload::main({payload: payload, attributes: attributes, vars:
 			</munit-tools:assert>
 		</munit:validation>
 	</munit:test>
+	<munit:test name="HotelsFlow-test-GetAllHotels" doc:id="c8aaefb5-41e0-4386-bb6b-dbd1f0cd2f45" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock Get All Hotels" doc:id="f9883796-73f0-493b-8445-85293f29599b" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="de1a59a4-21d6-4255-85af-1f8e4c9f5185" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl('classpath://HotelsFlowtestGetAllHotels\mock_payload.dwl')]" mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:attributes value="#[readUrl('classpath://HotelsFlowtestGetAllHotels\mock_attributes.dwl')]" />
+					<munit-tools:variables >
+						<munit-tools:variable key="outboundHeaders" value="#[readUrl('classpath://HotelsFlowtestGetAllHotels\mock_variable_.dwl')]" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="7f45e819-65db-4746-9925-62438f55136e" >
+				<munit:payload value="#[output application/json --- readUrl('classpath://HotelsFlowtestGetAllHotels\set-event_payload.dwl')]" encoding="UTF-8" mediaType="application/json" />
+				<munit:attributes value="#[readUrl('classpath://HotelsFlowtestGetAllHotels\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://HotelsFlowtestGetAllHotels\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to HotelsFlow" doc:id="a33ee871-ff7e-475d-8922-7bc3c9c01c4f" name="HotelsFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="7b5c16e8-ccf2-45ef-b642-94a38138bf2b" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import HotelsFlowtestGetAllHotels::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="HotelsFlow-test-GetHotelByID" doc:id="55d461ad-83bf-4675-97cc-e57b32e1881d" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock Get Hotel By ID" doc:id="29f9a3e9-c52c-483a-a2a5-4fec407e5065" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="04c52008-0d99-4c18-932a-039c80f713dd" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl('classpath://HotelsFlowtestGetHotelByID\mock_payload.dwl')]" mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:attributes value="#[readUrl('classpath://HotelsFlowtestGetHotelByID\mock_attributes.dwl')]" />
+					<munit-tools:variables >
+						<munit-tools:variable key="outboundHeaders" value="#[readUrl('classpath://HotelsFlowtestGetHotelByID\mock_variable_.dwl')]" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="5c5f880e-5346-4f41-ae8c-29d8c3e19ba5" >
+				<munit:payload value="#[output application/json --- readUrl('classpath://HotelsFlowtestGetHotelByID\set-event_payload.dwl')]" encoding="UTF-8" mediaType="application/json" />
+				<munit:attributes value="#[readUrl('classpath://HotelsFlowtestGetHotelByID\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://HotelsFlowtestGetHotelByID\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to HotelsFlow" doc:id="67c68143-9ba2-4482-81a0-810755d9c2fd" name="HotelsFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="974efbb8-e133-4f3f-9c1c-85f92a752d2d" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import HotelsFlowtestGetHotelByID::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="HotelsFlow-test-GetHotelByID_No_Data" doc:id="aff9cd05-3784-4cf1-8ebc-6d6fbe62647a" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock Get Hotel By ID" doc:id="109d7642-f650-45b5-9aa9-d58e284ea6b8" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="04c52008-0d99-4c18-932a-039c80f713dd" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl('classpath://HotelsFlowtestGetHotelByIDNoData\mock_payload.dwl')]" mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:attributes value="#[readUrl('classpath://HotelsFlowtestGetHotelByIDNoData\mock_attributes.dwl')]" />
+					<munit-tools:variables >
+						<munit-tools:variable key="outboundHeaders" value="#[readUrl('classpath://HotelsFlowtestGetHotelByIDNoData\mock_variable_.dwl')]" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="1fea0660-f734-4b41-a902-71fb66aac779" >
+				<munit:payload value="#[output application/json --- readUrl('classpath://HotelsFlowtestGetHotelByIDNoData\set-event_payload.dwl')]" encoding="UTF-8" mediaType="application/json" />
+				<munit:attributes value="#[readUrl('classpath://HotelsFlowtestGetHotelByIDNoData\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://HotelsFlowtestGetHotelByIDNoData\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to HotelsFlow" doc:id="f4b88e90-1a97-475a-b8db-9c27757057c4" name="HotelsFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="29c1ac27-b486-40f8-8760-020a01accaf4" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import HotelsFlowtestGetHotelByIDNoData::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="HotelsFlow-test-Delete" doc:id="9c2cd3dc-13bb-43d4-b411-01d66092c71c" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock Delete Hotel By ID" doc:id="2f7881fa-b0a3-4e39-8e18-46cb8e198699" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="12b7e95d-6de6-4d0f-8026-7570356bbb2d" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl('classpath://HotelsFlowtestDelete\mock_payload.dwl')]" mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:attributes value="#[readUrl('classpath://HotelsFlowtestDelete\mock_attributes.dwl')]" />
+					<munit-tools:variables >
+						<munit-tools:variable key="outboundHeaders" value="#[readUrl('classpath://HotelsFlowtestDelete\mock_variable_.dwl')]" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="2efc26f3-850a-4578-b789-55dcd50ab1bd" >
+				<munit:payload value="#[output application/json --- readUrl('classpath://HotelsFlowtestDelete\set-event_payload.dwl')]" encoding="UTF-8" mediaType="application/json" />
+				<munit:attributes value="#[readUrl('classpath://HotelsFlowtestDelete\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://HotelsFlowtestDelete\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to HotelsFlow" doc:id="ccbc2da3-927e-40cd-a4b4-d76df840f3a7" name="HotelsFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="1f5cbc3d-b1e5-4bb2-bab4-ee3992a23032" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import HotelsFlowtestDelete::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
 
 
 </mule>
