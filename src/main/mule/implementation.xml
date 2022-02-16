@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
-	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
-http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 	<flow name="Flights_Flow" doc:id="19e61c52-80b7-4970-8193-bba19218ce53" >
 		<choice doc:name="Choice" doc:id="4b8fc798-9566-41ab-904d-4ad8c622fac0" >
 			<when expression="#[attributes.method == 'GET' and attributes.uriParams.flightid == null]">
@@ -76,6 +77,15 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 	"flightid" : attributes.uriParams.flightid
 }]]]></http:uri-params>
 		</http:request>
+				<ee:transform doc:name="Transform Message" doc:id="48bb2599-6e00-40fc-a328-a5240ac00efe">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+var action = if(payload == []) Message: "No Data found for the given Flight ID " else payload
+---
+action]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
 			</when>
 			<otherwise >
 				<set-payload value="Wrong Method" doc:name="Set Payload" doc:id="d356abf8-a04b-4dba-9f9a-99eba4136ab8" />
@@ -153,6 +163,15 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 	"bookingid" : attributes.uriParams.bookingid
 }]]]></http:uri-params>
 		</http:request>
+				<ee:transform doc:name="Transform Message" doc:id="c543320b-2c7d-4eab-b093-c69866ec3c4e" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+var action = if(payload == []) Message: "No Data found for the given Booking ID " else payload
+---
+action]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
 			</when>
 			<otherwise>
 				<set-payload value="Wrong Method" doc:name="Payload" doc:id="981fe4ae-b2ac-47c7-a615-e7781855eb6e" />
@@ -230,6 +249,15 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 	"partnerid" : attributes.uriParams.partnerid
 }]]]></http:uri-params>
 		</http:request>
+				<ee:transform doc:name="Transform Message" doc:id="2428bb7f-e244-4c45-ae38-53956137ea16" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+var action = if(payload == []) Message: "No Data found for the given Partner ID " else payload
+---
+action]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
 			</when>
 			<otherwise>
 				<set-payload value="Wrong Method" doc:name="Set Payload" doc:id="9993d61a-4c53-4b10-a9f8-0a09e2bcdf29" />
@@ -302,6 +330,15 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 	"carId" : attributes.uriParams.carId
 }]]]></http:uri-params>
 		</http:request>
+				<ee:transform doc:name="Transform Message" doc:id="72ffb859-f5c8-4e52-a915-c4d72609d9c1" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+var action = if(payload == []) Message: "No Data found for the given CAR ID " else payload
+---
+action]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
 			</when>
 			<otherwise >
 				<set-payload value="Wrong Input/Method " doc:name="Set Payload" doc:id="6f7e2873-472d-478d-bf69-f47d723ac30f" />
@@ -359,9 +396,18 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 	"bookingid" : attributes.uriParams.carbookingId
 }]]]></http:uri-params>
 				</http:request>
+				<ee:transform doc:name="Transform Message" doc:id="5c6fecc7-ced0-4fcf-929a-abde2b2ff07b" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+var action = if(payload == []) Message: "No Data found for the given Booking ID " else payload
+---
+action]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
 			</when>
 			<otherwise >
-				<set-payload value="Wrong Input/Method " doc:name="Set Payload" doc:id="2a417b66-c1e8-4d3a-9414-23b3ee6147e8" />
+				<set-payload value="Wrong Method. Please use only allowed Methods. [GET,POST,DELETE]" doc:name="Payload" doc:id="2a417b66-c1e8-4d3a-9414-23b3ee6147e8" />
 			</otherwise>
 		</choice>
 	</flow>
@@ -431,6 +477,15 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 	"partnerId" : attributes.uriParams.carpartnerId
 }]]]></http:uri-params>
 		</http:request>
+				<ee:transform doc:name="Transform Message" doc:id="da1edbe0-4b08-4b60-a193-a6edbd2b1d9c" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+var action = if(payload == []) Message: "No Data found for the given Partner ID " else payload
+---
+action]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
 			</when>
 			<otherwise>
 				<set-payload value="Wrong Input/Method " doc:name="Payload" doc:id="41510158-cd98-421c-a6c5-f6478059d82e" />
@@ -493,6 +548,15 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 	"hotelid" : attributes.uriParams.hotelid
 }]]]></http:uri-params>
 				</http:request>
+				<ee:transform doc:name="Transform Message" doc:id="3b3d186c-6213-4614-a7a7-3cab9e99110e" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+var action = if(payload."Hotel ID" == null) Message: "No Data found for the given Hotel ID " else payload
+---
+action]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
 			</when>
 			<when expression="#[attributes.method == 'GET' and attributes.uriParams.hotelid == null]" >
 				<http:request method="GET" doc:name="Get All Hotels" doc:id="de1a59a4-21d6-4255-85af-1f8e4c9f5185" config-ref="HTTP_Request_Hotel_Process" path="/hotels">
@@ -575,6 +639,15 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 	"bookingid" : attributes.uriParams.hbookingId
 }]]]></http:uri-params>
 				</http:request>
+				<ee:transform doc:name="Transform Message" doc:id="3cfdb8d2-c53f-4b49-9a45-cc8edb6bdba2" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+var action = if(payload."Hotel ID" == null) Message: "No Data found for the given Booking ID " else payload
+---
+action]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
 			</when>
 			<otherwise >
 				<set-payload value="Wrong Input/Method " doc:name="Copy_of_Payload" doc:id="c8c70e80-fc40-45db-a10f-63883ffe6d63" />
