@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
-	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
-http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+<mule xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd">
 	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="8ce45008-05ac-4e5a-bc37-0720129cc117" >
-		<http:listener-connection host="${http.host}" port="${http.port}" />
+		<http:listener-connection host="0.0.0.0" port="${http.port}" />
 	</http:listener-config>
 	<configuration-properties doc:name="Configuration properties" doc:id="d4ad04a1-e3f7-4a0d-a765-e49e88c0089c" file="config.yaml" />
 	<http:request-config name="HTTP_Request_Car_Process" doc:name="HTTP Request configuration" doc:id="6f4a9b21-5199-4086-8b28-a6b218ff8899" basePath="/api">
@@ -17,4 +18,5 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 	<http:request-config name="HTTP_Request_Hotel_Process" doc:name="HTTP Request configuration" doc:id="47b6d3a3-0c0e-4afc-b306-fec4b779f2f9" basePath="/api">
 		<http:request-connection host="${basepath.hotel}" />
 	</http:request-config>
+	<api-gateway:autodiscovery apiId="17638746" ignoreBasePath="false" doc:name="API Autodiscovery" doc:id="0531bc36-1e14-407d-afff-956734c62511" flowRef="experience-main" />
 </mule>
