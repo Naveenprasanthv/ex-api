@@ -494,6 +494,176 @@ assert_expression_payload::main({payload: payload, attributes: attributes, vars:
 			</munit-tools:assert>
 		</munit:validation>
 	</munit:test>
+	<munit:test name="Flights_Partner_Flow-AddPartner" doc:id="2b52718c-7d67-4721-b9c3-28526a4d87e2" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock Add Partner" doc:id="46fcbb12-8662-4f07-8c30-f1fbf8744675" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="3d3d8998-8acb-425c-a033-28ef22f0e10e" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl('classpath://FlightsPartnerFlowAddPartner\mock_payload.dwl')]" mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:attributes value="#[readUrl('classpath://FlightsPartnerFlowAddPartner\mock_attributes.dwl')]" />
+					<munit-tools:variables >
+						<munit-tools:variable key="outboundHeaders" value="#[readUrl('classpath://FlightsPartnerFlowAddPartner\mock_variable_.dwl')]" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="47fd9be3-088c-4356-917b-85046ee5d7bc" >
+				<munit:payload value="#[output application/json --- readUrl('classpath://FlightsPartnerFlowAddPartner\set-event_payload.dwl')]" encoding="UTF-8" mediaType="application/json" />
+				<munit:attributes value="#[readUrl('classpath://FlightsPartnerFlowAddPartner\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://FlightsPartnerFlowAddPartner\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to Flights_Partner_Flow" doc:id="c5f42f6b-cbb6-47df-9a26-d85126cfd8b1" name="Flights_Partner_Flow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="8d370509-98d1-49eb-9e43-78b9451cca25" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import FlightsPartnerFlowAddPartner::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="Flights_Partner_Flow-DeletePartner" doc:id="d3d6932d-4383-4d7f-89ee-32dad251e561" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock Delete Partner by ID" doc:id="8e34bf63-f65f-4c68-af39-be3a38cd6e37" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="02ab4c0e-3cc8-4159-a7af-e28de7d6775f" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl('classpath://FlightsPartnerFlowDeletePartner\mock_payload.dwl')]" mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:attributes value="#[readUrl('classpath://FlightsPartnerFlowDeletePartner\mock_attributes.dwl')]" />
+					<munit-tools:variables >
+						<munit-tools:variable key="outboundHeaders" value="#[readUrl('classpath://FlightsPartnerFlowDeletePartner\mock_variable_.dwl')]" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="612ec233-7c63-41f3-83dc-841c5f3cc60a" >
+				<munit:payload value="#[output application/json --- readUrl('classpath://FlightsPartnerFlowDeletePartner\set-event_payload.dwl')]" encoding="UTF-8" mediaType="application/json" />
+				<munit:attributes value="#[readUrl('classpath://FlightsPartnerFlowDeletePartner\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://FlightsPartnerFlowDeletePartner\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to Flights_Partner_Flow" doc:id="e9518458-61a5-49f6-aafc-e93c231ade8a" name="Flights_Partner_Flow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="42e6bea0-7f20-4ecb-b892-f69604fd698e" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import FlightsPartnerFlowDeletePartner::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="CarsFlow-test-GetAllCars" doc:id="f103dc30-d451-4dcc-8340-00ae4d724267" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock Get All Cars" doc:id="22bc7d3e-fe3b-4090-952c-a33f5849d958" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="f3cd0987-40b3-441c-905e-570c75cd4de5" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl('classpath://CarsFlowtestGetAllCars\mock_payload.dwl')]" mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:attributes value="#[readUrl('classpath://CarsFlowtestGetAllCars\mock_attributes.dwl')]" />
+					<munit-tools:variables >
+						<munit-tools:variable key="outboundHeaders" value="#[readUrl('classpath://CarsFlowtestGetAllCars\mock_variable_.dwl')]" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="3eef0dd7-6ace-4a2d-a5a5-47c5493b2ee4" >
+				<munit:payload value="#[output application/json --- readUrl('classpath://CarsFlowtestGetAllCars\set-event_payload.dwl')]" encoding="UTF-8" mediaType="application/json" />
+				<munit:attributes value="#[readUrl('classpath://CarsFlowtestGetAllCars\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://CarsFlowtestGetAllCars\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to CarsFlow" doc:id="4ccf788d-a31b-4da6-95be-e768decd8fac" name="CarsFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="efde01e8-565b-4ad0-9bfd-3c6af094628d" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import CarsFlowtestGetAllCars::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="CarsFlow-test-GetCarByID" doc:id="98ff26c9-3765-42e6-8855-531c878f8522" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock Get Car By ID" doc:id="85a103af-ca13-4570-bcff-b7de30011945" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="b093710e-8ed0-4f97-bdf9-e9e86217f7ba" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl('classpath://CarsFlowtestGetCarByID\mock_payload.dwl')]" mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:attributes value="#[readUrl('classpath://CarsFlowtestGetCarByID\mock_attributes.dwl')]" />
+					<munit-tools:variables >
+						<munit-tools:variable key="outboundHeaders" value="#[readUrl('classpath://CarsFlowtestGetCarByID\mock_variable_.dwl')]" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="25090c84-db5d-4656-b6b9-eb124824ce15" >
+				<munit:payload value="#[output application/json --- readUrl('classpath://CarsFlowtestGetCarByID\set-event_payload.dwl')]" encoding="UTF-8" mediaType="application/json" />
+				<munit:attributes value="#[readUrl('classpath://CarsFlowtestGetCarByID\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://CarsFlowtestGetCarByID\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to CarsFlow" doc:id="4da72211-68bc-40d4-8c19-e7734b774346" name="CarsFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="9c21ff72-9f68-418a-be74-d0d042b3328f" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import CarsFlowtestGetCarByID::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="CarsFlow-test-GetCarByID_NoData" doc:id="48bb4bbb-c2a2-4ce8-b767-bb419f08008d" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock Get Car By ID" doc:id="faf1ab03-7e28-4bd9-a95e-e14a8bc00462" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="b093710e-8ed0-4f97-bdf9-e9e86217f7ba" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl('classpath://CarsFlowtestGetCarByIDNoData\mock_payload.dwl')]" mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:attributes value="#[readUrl('classpath://CarsFlowtestGetCarByIDNoData\mock_attributes.dwl')]" />
+					<munit-tools:variables >
+						<munit-tools:variable key="outboundHeaders" value="#[readUrl('classpath://CarsFlowtestGetCarByIDNoData\mock_variable_.dwl')]" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="d47aac2f-e574-4f61-804b-5cf83c51943a" >
+				<munit:payload value="#[output application/json --- readUrl('classpath://CarsFlowtestGetCarByIDNoData\set-event_payload.dwl')]" encoding="UTF-8" mediaType="application/json" />
+				<munit:attributes value="#[readUrl('classpath://CarsFlowtestGetCarByIDNoData\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://CarsFlowtestGetCarByIDNoData\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to CarsFlow" doc:id="2cdc4483-1cd4-4246-a543-cb8ecbd595ab" name="CarsFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="864cb8c5-6c56-4975-86c2-c649e2a60474" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import CarsFlowtestGetCarByIDNoData::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
 
 
 </mule>
