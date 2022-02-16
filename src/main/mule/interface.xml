@@ -11,7 +11,7 @@
                 <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
             </http:error-response>
         </http:listener>
-        <apikit:router config-ref="experience-config" />
+        <apikit:router config-ref="experience-config" doc:id="b8eb31ea-76a1-4802-ae3c-366c5525fa3e"/>
         <error-handler>
             <on-error-propagate type="APIKIT:BAD_REQUEST">
                 <ee:transform>
