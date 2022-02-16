@@ -162,7 +162,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 	<flow name="Flights_Partner_Flow" doc:id="3abb0c56-76ed-46f2-b7aa-d800a7cfd94b">
 		<choice doc:name="Choice" doc:id="5fb1feb5-abef-432c-9e0b-cbfa53dfbfa4">
 			<when expression="#[attributes.method == 'GET' and attributes.uriParams.partnerid == null]">
-				<http:request method="GET" doc:name="Get All Bookings" doc:id="262e24a3-32d2-41ae-89a1-4d62e7ed99b1" config-ref="HTTP_Request_Flight_Process" path="/partners">
+				<http:request method="GET" doc:name="Get All Partners" doc:id="262e24a3-32d2-41ae-89a1-4d62e7ed99b1" config-ref="HTTP_Request_Flight_Process" path="/partners">
 					<http:headers><![CDATA[#[output application/java
 ---
 {
@@ -173,7 +173,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 				</http:request>
 			</when>
 			<when expression="#[attributes.method == 'POST']">
-				<http:request method="POST" doc:name="Add Booking" doc:id="3d3d8998-8acb-425c-a033-28ef22f0e10e" config-ref="HTTP_Request_Flight_Process" path="/partners">
+				<http:request method="POST" doc:name="Add Partner" doc:id="3d3d8998-8acb-425c-a033-28ef22f0e10e" config-ref="HTTP_Request_Flight_Process" path="/partners">
 					<http:headers><![CDATA[#[output application/java
 ---
 {
@@ -184,7 +184,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 				</http:request>
 			</when>
 			<when expression="#[attributes.method == 'PATCH']">
-				<http:request method="PATCH" doc:name="Modify Booking By ID" doc:id="187dd4a5-3b77-4b85-9b29-fa818c1f64b5" config-ref="HTTP_Request_Flight_Process" path="/partners/{partnerid}">
+				<http:request method="PATCH" doc:name="Modify Partner By ID" doc:id="187dd4a5-3b77-4b85-9b29-fa818c1f64b5" config-ref="HTTP_Request_Flight_Process" path="/partners/{partnerid}">
 					<http:headers><![CDATA[#[output application/java
 ---
 {
@@ -195,12 +195,12 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 					<http:uri-params><![CDATA[#[output application/java
 ---
 {
-	"bookingid" : attributes.uriParams.bookingid
+	"partnerid" : attributes.uriParams.partnerid
 }]]]></http:uri-params>
 				</http:request>
 			</when>
 			<when expression="#[attributes.method == 'DELETE']">
-				<http:request method="DELETE" doc:name="Delete Booking by ID" doc:id="02ab4c0e-3cc8-4159-a7af-e28de7d6775f" config-ref="HTTP_Request_Flight_Process" path="/partners/{partnerid}">
+				<http:request method="DELETE" doc:name="Delete Partner by ID" doc:id="02ab4c0e-3cc8-4159-a7af-e28de7d6775f" config-ref="HTTP_Request_Flight_Process" path="/partners/{partnerid}">
 					<http:headers><![CDATA[#[output application/java
 ---
 {
@@ -211,7 +211,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 					<http:uri-params><![CDATA[#[output application/java
 ---
 {
-	"bookingid" : attributes.uriParams.bookingid
+	"partnerid" : attributes.uriParams.partnerid
 }]]]></http:uri-params>
 				</http:request>
 			</when>
@@ -224,6 +224,11 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 	"client_secret" : "Fa08cbF5bF38438589189754270c09f3"
 
 }]]]></http:headers>
+					<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	"partnerid" : attributes.uriParams.partnerid
+}]]]></http:uri-params>
 		</http:request>
 			</when>
 			<otherwise>
@@ -233,7 +238,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 	</flow>
 	<flow name="CarsFlow" doc:id="233f8178-6b00-4277-a129-673eb490cebe" >
 		<choice doc:name="Choice" doc:id="7ffaad00-d7a2-4613-8cbf-3a6d6001c196" >
-			<when expression="#[attributes.method == 'GET' and attributes.uriParams.carid == null]">
+			<when expression="#[attributes.method == 'GET' and attributes.uriParams.carId == null]">
 				<http:request method="GET" doc:name="Get All Cars" doc:id="f3cd0987-40b3-441c-905e-570c75cd4de5" config-ref="HTTP_Request_Car_Process" path="/car">
 			<http:headers><![CDATA[#[output application/java
 ---
@@ -253,8 +258,8 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 }]]]></http:headers>
 				</http:request>
 			</when>
-			<when expression="attributes.method == 'PATCH'">
-				<http:request method="PATCH" doc:name="Modify Car By ID" doc:id="8ffcb741-faa6-4739-92f4-a4205b662020" config-ref="HTTP_Request_Car_Process" path="/car/{carid}">
+			<when expression="#[attributes.method == 'PATCH']">
+				<http:request method="PATCH" doc:name="Modify Car By ID" doc:id="8ffcb741-faa6-4739-92f4-a4205b662020" config-ref="HTTP_Request_Car_Process" path="/car/{carId}">
 					<http:headers ><![CDATA[#[output application/java
 ---
 {
@@ -264,12 +269,12 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 					<http:uri-params ><![CDATA[#[output application/java
 ---
 {
-	"carid" : attributes.uriParams.carid
+	"carId" : attributes.uriParams.carId
 }]]]></http:uri-params>
 				</http:request>
 			</when>
-			<when expression="attributes.method == 'DELETE'">
-				<http:request method="DELETE" doc:name="Delete Car By ID" doc:id="0f38f5fa-0664-4507-841a-4a26aed149f6" config-ref="HTTP_Request_Car_Process" path="/car/{carid}">
+			<when expression="#[attributes.method == 'DELETE']">
+				<http:request method="DELETE" doc:name="Delete Car By ID" doc:id="0f38f5fa-0664-4507-841a-4a26aed149f6" config-ref="HTTP_Request_Car_Process" path="/car/{carId}">
 					<http:headers ><![CDATA[#[output application/java
 ---
 {
@@ -279,11 +284,11 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 					<http:uri-params ><![CDATA[#[output application/java
 ---
 {
-	"carid" : attributes.uriParams.carid
+	"carId" : attributes.uriParams.carId
 }]]]></http:uri-params>
 				</http:request>
 			</when>
-			<when expression="#[attributes.method == 'GET' and attributes.uriParams.carid != null]">
+			<when expression="#[attributes.method == 'GET' and attributes.uriParams.carId != null]">
 				<http:request method="GET" doc:name="Get Car By ID" doc:id="b093710e-8ed0-4f97-bdf9-e9e86217f7ba" config-ref="HTTP_Request_Car_Process" path="/car/{carId}">
 			<http:headers><![CDATA[#[output application/java
 ---
@@ -305,7 +310,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 	</flow>
 	<flow name="CarsBookingFlow" doc:id="5c303288-b0de-479a-af36-0675e043389e" >
 		<choice doc:name="Choice" doc:id="d55ad7a1-c56f-40d1-99ba-12be43ac8a35" >
-			<when expression="#[attributes.method == 'GET' and attributes.uriParams.bookingid == null]" >
+			<when expression="#[attributes.method == 'GET' and attributes.uriParams.carbookingId == null]" >
 				<http:request method="GET" doc:name="Get All CarBooking" doc:id="cae1f64b-ac06-43b9-96f7-2617e50c9a21" config-ref="HTTP_Request_Car_Process" path="/booking" >
 					<http:headers ><![CDATA[#[output application/java
 ---
@@ -325,7 +330,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 }]]]></http:headers>
 				</http:request>
 			</when>
-			<when expression="attributes.method == 'DELETE'" >
+			<when expression="#[attributes.method == 'DELETE']" >
 				<http:request method="DELETE" doc:name="Delete Booking By ID" doc:id="84f0103a-89e7-46c0-99ec-6b486ac93af8" config-ref="HTTP_Request_Car_Process" path="/booking/{bookingid}" >
 					<http:headers ><![CDATA[#[output application/java
 ---
@@ -336,11 +341,11 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 					<http:uri-params ><![CDATA[#[output application/java
 ---
 {
-	"bookingid" : attributes.uriParams.bookingid
+	"bookingid" : attributes.uriParams.carbookingId
 }]]]></http:uri-params>
 				</http:request>
 			</when>
-			<when expression="#[attributes.method == 'GET' and attributes.uriParams.bookingid != null]">
+			<when expression="#[attributes.method == 'GET' and attributes.uriParams.carbookingId != null]">
 				<http:request method="GET" doc:name="GetCarBookingByID" doc:id="d24c6bcb-649b-4f9f-afc5-1dc86b3e36ff" config-ref="HTTP_Request_Car_Process" path="/booking/{bookingid}" >
 					<http:headers ><![CDATA[#[output application/java
 ---
@@ -348,6 +353,11 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 	"client_secret" : "202Ac42233F8463AA0f8453F259Fd3e3",
 	"client_id" : "cd9c762cccaf4faf963f60c7a437ad5f"
 }]]]></http:headers>
+					<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	"bookingid" : attributes.uriParams.carbookingId
+}]]]></http:uri-params>
 				</http:request>
 			</when>
 			<otherwise >
@@ -357,7 +367,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 	</flow>
 	<flow name="CarsPartnersFlow" doc:id="96684107-78ef-40b2-8ea5-63d6380e0c8f">
 		<choice doc:name="Choice" doc:id="0746dafa-299d-440f-abcd-3bbb151b2223">
-			<when expression="#[attributes.method == 'GET' and attributes.uriParams.partnerid == null]">
+			<when expression="#[attributes.method == 'GET' and attributes.uriParams.carpartnerId == null]">
 				<http:request method="GET" doc:name="Get All Partners" doc:id="bc615ad7-26b5-41fc-a6ed-434f95a7d733" config-ref="HTTP_Request_Car_Process" path="/partner">
 					<http:headers><![CDATA[#[output application/java
 ---
@@ -377,8 +387,8 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 }]]]></http:headers>
 				</http:request>
 			</when>
-			<when expression="attributes.method == 'DELETE'" >
-				<http:request method="DELETE" doc:name="Delete Partner By ID" doc:id="89fc20d5-13a2-40c8-9966-263733245897" config-ref="HTTP_Request_Car_Process" path="/partner/{partnerid}">
+			<when expression="#[attributes.method == 'DELETE']" >
+				<http:request method="DELETE" doc:name="Delete Partner By ID" doc:id="89fc20d5-13a2-40c8-9966-263733245897" config-ref="HTTP_Request_Car_Process" path="/partner/{partnerId}">
 					<http:headers><![CDATA[#[output application/java
 ---
 {
@@ -388,12 +398,12 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 					<http:uri-params><![CDATA[#[output application/java
 ---
 {
-	"partnerid" : attributes.uriParams.partnerid
+	"partnerId" : attributes.uriParams.carpartnerId
 }]]]></http:uri-params>
 				</http:request>
 			</when>
 			<when expression="#[attributes.method == 'PATCH']">
-				<http:request method="PATCH" doc:name="Modify partner details" doc:id="388cff27-bf56-4ea1-a9a1-b517dcad1198" config-ref="HTTP_Request_Car_Process" path="/partner/{partnerid}">
+				<http:request method="PATCH" doc:name="Modify partner details" doc:id="388cff27-bf56-4ea1-a9a1-b517dcad1198" config-ref="HTTP_Request_Car_Process" path="/partner/{partnerId}">
 					<http:headers ><![CDATA[#[output application/java
 ---
 {
@@ -403,12 +413,12 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 					<http:uri-params ><![CDATA[#[output application/java
 ---
 {
-	"partnerid" : attributes.uriParams.partnerid
+	"partnerId" : attributes.uriParams.carpartnerId
 }]]]></http:uri-params>
 				</http:request>
 			</when>
-			<when expression="#[attributes.method == 'GET' and attributes.uriParams.partnerid != null]">
-				<http:request method="GET" doc:name="Get Partner By ID" doc:id="ba2a91c7-7a90-4258-a112-ba33cc6fc727" config-ref="HTTP_Request_Car_Process" path="/partner/{partnerid}">
+			<when expression="#[attributes.method == 'GET' and attributes.uriParams.carpartnerId != null]">
+				<http:request method="GET" doc:name="Get Partner By ID" doc:id="ba2a91c7-7a90-4258-a112-ba33cc6fc727" config-ref="HTTP_Request_Car_Process" path="/partner/{partnerId}">
 			<http:headers><![CDATA[#[output application/java
 ---
 {
@@ -418,7 +428,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 			<http:uri-params><![CDATA[#[output application/java
 ---
 {
-	"partnerid" : attributes.uriParams.partnerid
+	"partnerId" : attributes.uriParams.carpartnerId
 }]]]></http:uri-params>
 		</http:request>
 			</when>
@@ -439,7 +449,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 }]]]></http:headers>
 				</http:request>
 			</when>
-			<when expression="attributes.method == 'DELETE'" >
+			<when expression="#[attributes.method == 'DELETE']" >
 				<http:request method="DELETE" doc:name="Delete Hotel By ID" doc:id="12b7e95d-6de6-4d0f-8026-7570356bbb2d" config-ref="HTTP_Request_Hotel_Process" path="/hotels/{hotelid}" >
 					<http:headers ><![CDATA[#[output application/java
 ---
@@ -501,7 +511,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 	</flow>
 	<flow name="HotelBookingFlow" doc:id="42f6fd5d-448e-4339-b3be-900a0867722a" >
 		<choice doc:name="CChoice" doc:id="af7de0bd-de64-4da1-9714-6a2b37a04252" >
-			<when expression="#[attributes.method == 'GET' and attributes.uriParams.bookingid == null]" >
+			<when expression="#[attributes.method == 'GET' and attributes.uriParams.hbookingId == null]" >
 				<http:request method="GET" doc:name="Get All Bookings" doc:id="9852f1bd-f366-4fb9-be38-aa0dd1bcb093" config-ref="HTTP_Request_Hotel_Process" path="/booking" >
 					<http:headers ><![CDATA[#[output application/java
 ---
@@ -521,7 +531,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 }]]]></http:headers>
 				</http:request>
 			</when>
-			<when expression="attributes.method == 'DELETE'" >
+			<when expression="#[attributes.method == 'DELETE']" >
 				<http:request method="DELETE" doc:name="Delete Booking By ID" doc:id="2cb11605-dedd-4d0d-8a6e-2b355db0f1a3" config-ref="HTTP_Request_Hotel_Process" path="/booking/{bookingid}" >
 					<http:headers ><![CDATA[#[output application/java
 ---
@@ -532,7 +542,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 					<http:uri-params ><![CDATA[#[output application/java
 ---
 {
-	"bookingid" : attributes.uriParams.bookingid
+	"bookingid" : attributes.uriParams.hbookingId
 }]]]></http:uri-params>
 				</http:request>
 			</when>
@@ -547,11 +557,11 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 					<http:uri-params ><![CDATA[#[output application/java
 ---
 {
-	"bookingid" : attributes.uriParams.bookingid
+	"bookingid" : attributes.uriParams.hbookingId
 }]]]></http:uri-params>
 				</http:request>
 			</when>
-			<when expression="#[attributes.method == 'GET' and attributes.uriParams.bookingid != null]" >
+			<when expression="#[attributes.method == 'GET' and attributes.uriParams.hbookingId != null]" >
 				<http:request method="GET" doc:name="Get Booking By ID" doc:id="fbf964d4-c5a7-4f86-9e26-63ab68800bc8" config-ref="HTTP_Request_Hotel_Process" path="/booking/{bookingid}" >
 					<http:headers ><![CDATA[#[output application/java
 ---
@@ -562,7 +572,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 					<http:uri-params ><![CDATA[#[output application/java
 ---
 {
-	"bookingid" : attributes.uriParams.bookingid
+	"bookingid" : attributes.uriParams.hbookingId
 }]]]></http:uri-params>
 				</http:request>
 			</when>
