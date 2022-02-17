@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
-	xmlns="http://www.mulesoft.org/schema/mule/core"
-	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+<mule xmlns:validation="http://www.mulesoft.org/schema/mule/validation" xmlns:email="http://www.mulesoft.org/schema/mule/email"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
-http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/current/mule-email.xsd
+http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd">
 	<flow name="Flights_Flow" doc:id="19e61c52-80b7-4970-8193-bba19218ce53" >
 		<choice doc:name="Choice" doc:id="4b8fc798-9566-41ab-904d-4ad8c622fac0" >
 			<when expression="#[attributes.method == 'GET' and attributes.uriParams.flightid == null]">
-				<http:request method="GET" doc:name="Get All Flights" doc:id="b5674212-258c-4433-8f77-f95f6ca3dd6e" config-ref="HTTP_Request_Flight_Process" path="/flights">
+				<choice doc:name="Choice" doc:id="0fe2838c-0ff5-4922-99ff-17c142de2f26" >
+					<when expression="#[attributes.queryParams.origin != null and attributes.queryParams.destination != null]">
+						<http:request method="GET" doc:name="Get All Flights" doc:id="b5674212-258c-4433-8f77-f95f6ca3dd6e" config-ref="HTTP_Request_Flight_Process" path="/flights">
 			<http:headers><![CDATA[#[output application/java
 ---
 {
@@ -16,13 +20,26 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 	"client_secret" : "Fa08cbF5bF38438589189754270c09f3"
 
 }]]]></http:headers>
-					<http:query-params ><![CDATA[#[output application/java
+					<http:query-params><![CDATA[#[output application/java
 ---
 {
 	"origin" : attributes.queryParams.origin,
 	"destination" : attributes.queryParams.destination
 }]]]></http:query-params>
 		</http:request>
+					</when>
+					<otherwise >
+						<http:request method="GET" doc:name="Get All Flights" doc:id="23ee48fe-32b9-4af2-b304-cedd840953db" config-ref="HTTP_Request_Flight_Process" path="/flights" >
+							<http:headers ><![CDATA[#[output application/java
+---
+{
+	"client_id" : "f96fb30a54e948cc8d18ac2ac85bff12",
+	"client_secret" : "Fa08cbF5bF38438589189754270c09f3"
+
+}]]]></http:headers>
+						</http:request>
+					</otherwise>
+				</choice>
 			</when>
 			<when expression="#[attributes.method == 'POST']">
 				<http:request method="POST" doc:name="Add Flight" doc:id="2ca6e621-675d-4998-a36b-dc3baee91f63" config-ref="HTTP_Request_Flight_Process" path="/flights">
@@ -656,8 +673,33 @@ action]]></ee:set-payload>
 				</ee:transform>
 			</when>
 			<otherwise >
-				<set-payload value="Wrong Input/Method " doc:name="Copy_of_Payload" doc:id="c8c70e80-fc40-45db-a10f-63883ffe6d63" />
+				<set-payload value="Wrong Input/Method " doc:name="Payload" doc:id="c8c70e80-fc40-45db-a10f-63883ffe6d63" />
 			</otherwise>
 		</choice>
+	</flow>
+	<flow name="implementationFlow" doc:id="badcf2e8-99f2-4b91-ae5f-4d9e559c1e87" >
+		<scheduler doc:name="Scheduler" doc:id="e536e93b-4e47-4d62-b8af-dc6de1c0cbba" >
+			<scheduling-strategy >
+				<fixed-frequency frequency="1" timeUnit="HOURS"/>
+			</scheduling-strategy>
+		</scheduler>
+		<http:request method="GET" doc:name="CarBooking" doc:id="51689ff5-5b8f-45b0-93df-64a6dab68354" config-ref="HTTP_Request_Car_Process" path="/booking">
+			<http:headers><![CDATA[#[output application/java
+---
+{
+	"client_secret" : "202Ac42233F8463AA0f8453F259Fd3e3",
+	"client_id" : "cd9c762cccaf4faf963f60c7a437ad5f"
+}]]]></http:headers>
+		</http:request>
+		<email:send doc:name="Send" doc:id="c8253050-f254-44b7-bbec-908871cfd2fe" config-ref="Email_SMTP" fromAddress="kowshalya.b@apisero.com" subject="BookMyHoliday Consolidation">
+			<email:to-addresses >
+				<email:to-address value="kowshalya.b@apisero.com" />
+			</email:to-addresses>
+			<email:body contentType="text/plain" encoding="UTF-8" />
+			<email:attachments ><![CDATA[#[{
+	"consolidation.txt": payload 
+}]]]></email:attachments>
+		</email:send>
+		<logger level="INFO" doc:name="Logger" doc:id="46772b18-e48d-4c82-953c-9ee71e7e6893" message="Flow ended"/>
 	</flow>
 </mule>
