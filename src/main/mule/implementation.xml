@@ -16,6 +16,12 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 	"client_secret" : "Fa08cbF5bF38438589189754270c09f3"
 
 }]]]></http:headers>
+					<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"origin" : attributes.queryParams.origin,
+	"destination" : attributes.queryParams.destination
+}]]]></http:query-params>
 		</http:request>
 			</when>
 			<when expression="#[attributes.method == 'POST']">
