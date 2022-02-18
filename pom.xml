@@ -89,13 +89,6 @@
 			<classifier>mule-plugin</classifier>
 		</dependency>
 		<dependency>
-			<groupId>a48df65f-4162-4f7b-b907-b5f038686e7a</groupId>
-			<artifactId>experience</artifactId>
-			<version>1.0.0</version>
-			<classifier>raml</classifier>
-			<type>zip</type>
-		</dependency>
-		<dependency>
 			<groupId>org.mule.modules</groupId>
 			<artifactId>mule-apikit-module</artifactId>
 			<version>1.5.9</version>
@@ -132,6 +125,13 @@
 			<artifactId>mule-validation-module</artifactId>
 			<version>1.4.5</version>
 			<classifier>mule-plugin</classifier>
+		</dependency>
+		<dependency>
+			<groupId>a48df65f-4162-4f7b-b907-b5f038686e7a</groupId>
+			<artifactId>experience</artifactId>
+			<version>1.0.2</version>
+			<classifier>raml</classifier>
+			<type>zip</type>
 		</dependency>
 	</dependencies>
 
